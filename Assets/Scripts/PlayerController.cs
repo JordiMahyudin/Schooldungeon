@@ -7,6 +7,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float MovementSpeed = 5;
 
+
+    Rigidbody m_Rigidbody;
+    public float m_Thrust = 10f;
+
+
+    void Start()
+    {
+        m_Rigidbody = GetComponent<Rigidbody>();
+    }
+
+
     private void Update()
     {
         if (Input.GetKey(KeyCode.W))
@@ -26,4 +37,6 @@ public class PlayerController : MonoBehaviour
             transform.position -= transform.right * MovementSpeed * Time.deltaTime;
         }
     }
+
+
 }
