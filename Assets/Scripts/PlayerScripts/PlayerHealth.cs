@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] HitPoints;
-    public int Lifes;
+    private GameObject[] HitPoints; //Physical ingame lifes
+    public int Lifes; // Value van de levens
 
     private void Start()
     {
-        Lifes = HitPoints.Length;
+        Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
     }
 
     void Update()
@@ -21,12 +21,14 @@ public class PlayerHealth : MonoBehaviour
 
     public void ReduceLife(int damage)
     {
-        Lifes -= damage;
-        Destroy(HitPoints[Lifes].gameObject);
-        if (Lifes < 1)
+        if (Lifes >= 1)
         {
-           
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            Lifes -= damage; //Takes a life when damage taken (use damage for enemies)
+            Destroy(HitPoints[Lifes].gameObject); //Destroys hitpoint when damage was taken
+            if (Lifes < 1)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Temporarly added this so it reloads the scene whenever all lifes are gone
+            }
         }
     }    
 
