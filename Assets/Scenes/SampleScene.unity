@@ -464,6 +464,8 @@ MonoBehaviour:
   MovementSpeed: 5
   DashSpeed: 1
   EndPosition: {fileID: 69626918}
+  DashOnCooldown: 0
+  DashingCooldown: 2.5
 --- !u!65 &2048276094
 BoxCollider:
   m_ObjectHideFlags: 0
