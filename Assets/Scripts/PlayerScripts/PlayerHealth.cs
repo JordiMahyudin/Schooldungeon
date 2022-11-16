@@ -14,11 +14,6 @@ public class PlayerHealth : MonoBehaviour
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
     }
 
-    void Update()
-    {
-        
-    }
-
     public void ReduceLife(int damage)
     {
         if (Lifes >= 1)

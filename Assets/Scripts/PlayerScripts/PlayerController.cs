@@ -5,68 +5,81 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+       
+    [Header("Movement Stuff")]
     [SerializeField]
     private float MovementSpeed = 5;
     [SerializeField]
     private float DashSpeed = 1f; 
 
+    [Header("Dashing Stuff")]
     [SerializeField]
     private Transform EndPosition;  //Eindpositie van de dash voor de lerp
-    public bool DashOnCooldown = false;
-    private float startTime;
-    float dashLerp;  //Value van 0-1 voor de lerp
-    private float journeyLength; //Hoe ver de lerp moet gaan.
     [SerializeField]
     private float DashingCooldown = 2.5f;
+    public bool dashOnCooldown = false;
+    float dashLerp;  //Value van 0-1 voor de lerp
+    private float journeyLength; //Hoe ver de lerp moet gaan.
+
+    [Header("Dash Location")]
+    //All dash spots
+    [SerializeField]
+    private GameObject dashspot;
+    [SerializeField]
+    private GameObject dashspot1;
+    [SerializeField]
+    private GameObject dashspot2;
+    [SerializeField]
+    private GameObject dashspot3;
 
 
-    private void Awake()
-    {
-
-    }
     void Start()
     {
         journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
     }
 
-
     private void Update()
     {
         if (Input.GetKey(KeyCode.W))
         {
+            EndPosition = dashspot.transform; //Sets it to the position you need to dash to
             transform.position += transform.forward * MovementSpeed * Time.deltaTime;
         }
-        else if (Input.GetKey(KeyCode.S))
+        
+        if (Input.GetKey(KeyCode.S))
         {
+            EndPosition = dashspot3.transform; //Sets it to the position you need to dash to
             transform.position -= transform.forward * MovementSpeed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D))
         {
+            EndPosition = dashspot1.transform; //Sets it to the position you need to dash to
             transform.position += transform.right * MovementSpeed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.A))
         {
+
+            EndPosition = dashspot2.transform; //Sets it to the position you need to dash to
             transform.position -= transform.right * MovementSpeed * Time.deltaTime;
         }
 
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (DashOnCooldown == false)
+            if (dashOnCooldown == false)
             {
                 StartCoroutine(Dashing());
             }
         }
-        if (DashOnCooldown == true)
+        if (dashOnCooldown == true)
         {
             DashingCooldown -= Time.deltaTime; //Start tijd van de player.
             if (DashingCooldown <= 0f)
             {
-                DashOnCooldown = false;
+                dashOnCooldown = false;
                 DashingCooldown = 2.5f;
             }
         }
-
-
 
     }
     IEnumerator Dashing() //Coroutine zodat de dash smoothe gaat. Omdat ik de movement heb gehardcode.
@@ -78,9 +91,8 @@ public class PlayerController : MonoBehaviour
             dashLerp += Time.deltaTime * DashSpeed;
             transform.position = Vector3.Lerp(transform.position, endpos, fractionOfJourney);
             yield return new WaitForSeconds(0.001f);
-            DashOnCooldown = true;
+            dashOnCooldown = true;
         }
         dashLerp = 0;
-       
     }
 }
