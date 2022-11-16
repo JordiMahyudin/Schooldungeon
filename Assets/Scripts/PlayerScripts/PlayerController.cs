@@ -8,16 +8,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float MovementSpeed = 5;
     [SerializeField]
-    private float DashSpeed = 1f;
+    private float DashSpeed = 1f; 
 
     [SerializeField]
-    private Transform EndPosition;
+    private Transform EndPosition;  //Eindpositie van de dash voor de lerp
     private bool DashOnCooldown = false;
-    public float m_Thrust = 10f;
-
     private float startTime;
-    float dashLerp;
-    private float journeyLength;
+    float dashLerp;  //Value van 0-1 voor de lerp
+    private float journeyLength; //Hoe ver de lerp moet gaan.
 
 
     private void Awake()
@@ -26,11 +24,8 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
-        startTime = Time.time;
-        journeyLength = Vector3.Distance(transform.position, EndPosition.position);
-        
-        
-
+        startTime = Time.time; //Start tijd van de player.
+        journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
     }
 
 
@@ -53,21 +48,18 @@ public class PlayerController : MonoBehaviour
             transform.position -= transform.right * MovementSpeed * Time.deltaTime;
         }
 
-     
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            StartCoroutine(Dashing());
+            StartCoroutine(Dashing()); 
         }
 
     }
-    IEnumerator Dashing()
+    IEnumerator Dashing() //Coroutine zodat de dash smoothe gaat. Omdat ik de movement heb gehardcode.
     {
-        Vector3 endpos = EndPosition.position;
+        Vector3 endpos = EndPosition.position;  //Saved de eind positie
         while (dashLerp < 1)
         {
-            
-            float fractionOfJourney = dashLerp / journeyLength;
+            float fractionOfJourney = dashLerp / journeyLength; 
             dashLerp += Time.deltaTime * DashSpeed;
             transform.position = Vector3.Lerp(transform.position, endpos, fractionOfJourney);
             yield return new WaitForSeconds(0.001f);
