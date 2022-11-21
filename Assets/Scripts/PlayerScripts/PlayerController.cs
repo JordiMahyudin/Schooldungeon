@@ -32,14 +32,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject dashspot3;
 
+    //private Animation anim;
+
 
     void Start()
     {
+      //  anim = gameObject.GetComponent<Animation>();
         journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
     }
 
     private void Update()
     {
+       // if (anim.isPlaying)
+       // {
+       //     return;
+       // }
+
         if (Input.GetKey(KeyCode.W))
         {
             EndPosition = dashspot.transform; //Sets it to the position you need to dash to
