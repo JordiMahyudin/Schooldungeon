@@ -254,20 +254,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0cead55eb7812e419dd5fec588a9cb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wayPoints: []
-  speed: 5
-  radius: 4.5
-  angle: 100
-  playerRef: {fileID: 1818640491}
-  player: {fileID: 1818640495}
-  targetMask:
+  m_wayPoints: []
+  m_speed: 3
+  m_radius: 7
+  m_angle: 90
+  m_playerRef: {fileID: 0}
+  m_player: {fileID: 0}
+  m_targetMask:
     serializedVersion: 2
     m_Bits: 64
-  obstructionMask:
+  m_obstructionMask:
     serializedVersion: 2
     m_Bits: 128
-  canSeePlayer: 0
-  Enemy: {fileID: 1151889492}
+  m_canSeePlayer: 0
+  m_Enemy: {fileID: 0}
 --- !u!65 &1151889488
 BoxCollider:
   m_ObjectHideFlags: 0
