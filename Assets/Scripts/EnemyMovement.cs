@@ -24,10 +24,10 @@ public class EnemyMovement : MonoBehaviour
 
     public NavMeshAgent m_Enemy;
 
-    //[SerializeField] private float fireRate = 0.1f;
-    //private float fireCountDown = 0.5f;
-    //[SerializeField] private GameObject knifePrefab;
-    //[SerializeField] private Transform throwPoint;
+    [SerializeField]
+    private GameObject[] HitPoints; //Physical ingame lifes
+    public int Lifes; // Value van de levens
+
 
     private void Start()
     {
@@ -36,6 +36,7 @@ public class EnemyMovement : MonoBehaviour
         m_playerRef = GameObject.FindGameObjectWithTag("Target");
         StartCoroutine(FOVRoutine());
         m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+        Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
     }
 
     private void Update()
@@ -137,6 +138,19 @@ public class EnemyMovement : MonoBehaviour
         //    shot.Seek(player);
 
         
+    }
+
+    public void ReduceLife(int damage)
+    {
+        if (Lifes >= 1)
+        {
+            Lifes -= damage; //Takes a life when damage taken (use damage for enemies)
+            Destroy(HitPoints[Lifes].gameObject); //Destroys hitpoint when damage was taken
+            if (Lifes < 1)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
