@@ -28,10 +28,19 @@ public class PlayerHealth : MonoBehaviour
                 HitPoints[i].color = Color.black;
             }
         }
+        if (Lifes <= 0)
+        {
+            Death();
+        }
     }    
 
     private void GetExtraLife()
     {
         //Add code whenever you get a pickup you get an extra life back
+    }
+
+    private void Death()
+    {
+
     }
 }
