@@ -33,7 +33,7 @@ public class EnemyMovement : MonoBehaviour
     {
         MwayPointIndex = 0;
         transform.LookAt(m_wayPoints[MwayPointIndex].position);
-        m_playerRef = GameObject.FindGameObjectWithTag("test");
+        m_playerRef = GameObject.FindGameObjectWithTag("Target");
         StartCoroutine(FOVRoutine());
         m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
     }
