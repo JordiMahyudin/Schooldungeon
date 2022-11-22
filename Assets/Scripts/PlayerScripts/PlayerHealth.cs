@@ -18,7 +18,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (enemyCollider.gameObject.CompareTag("enemy"))
+        if (other.gameObject.CompareTag("Target"))
         {
             TakeDamage();
         }
