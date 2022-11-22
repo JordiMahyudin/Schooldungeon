@@ -4,15 +4,36 @@ using UnityEngine;
 
 public class AttackingScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private GameObject attackingZone = default;
+    private bool Slashing = true;
+    private float Timer = 0f;
+    private float AttackingTime = 0.25f;
+
     void Start()
     {
-        
+        attackingZone = transform.GetChild(0).gameObject;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            Attack();
+        }
+        if (Slashing)
+        {
+            Timer += Time.deltaTime;
+        }
+        if (Timer >= AttackingTime)
+        {
+            Timer = 0;
+            Slashing = false;
+            attackingZone.SetActive(Slashing);
+        }
+    }
+
+    private void Attack()
+    {
+
     }
 }
