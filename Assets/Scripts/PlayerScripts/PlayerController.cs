@@ -39,6 +39,11 @@ public class PlayerController : MonoBehaviour
     private bool AttackingCooldown = false;
     private float TimeToAttack = 1f;
 
+    [Header("Perfect Dashing")]
+    [SerializeField]
+    GameObject DashHitbox;
+    private bool hitboxDisabled;
+
 
 
 
@@ -50,6 +55,7 @@ public class PlayerController : MonoBehaviour
       //  anim = gameObject.GetComponent<Animation>();
         journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
         attackHitbox.SetActive(false);
+        DashHitbox.SetActive(false);
     }
 
     private void Update()
@@ -90,6 +96,7 @@ public class PlayerController : MonoBehaviour
             if (dashOnCooldown == false)
             {
                 StartCoroutine(Dashing());
+                StartCoroutine(perfectDashing());
             }
         }
         if (dashOnCooldown == true)
@@ -109,10 +116,7 @@ public class PlayerController : MonoBehaviour
 
             StartCoroutine(DoAttack());
         }
-
     }
-
-
     IEnumerator DoAttack()
 	{
         attackHitbox.SetActive(true);
@@ -121,6 +125,13 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
 	}
 
+    IEnumerator perfectDashing()
+    {
+        DashHitbox.SetActive(true);
+        yield return new WaitForSeconds(0.8f);
+        DashHitbox.SetActive(false);
+
+    }
     IEnumerator Dashing() //Coroutine zodat de dash smoothe gaat. Omdat ik de movement heb gehardcode.
     {
         Vector3 endpos = EndPosition.position;  //Saved de eind positie
