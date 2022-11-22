@@ -8,7 +8,7 @@ public class QuickTestScript : MonoBehaviour
    public int health = 3;
 
     public bool Hittable = true;
-    public float HitCooldown = 1.5f;
+    public float HitCooldown = 0.8f;
 
     [SerializeField]
     private Collider thisCollider;
@@ -19,8 +19,19 @@ public class QuickTestScript : MonoBehaviour
     {
         if (Hittable == false)
         {
-            HitCooldown -= Time.deltaTime;
+            if (HitCooldown >= 0)
+            {
+                HitCooldown -= Time.deltaTime;
+            }
+            else if (HitCooldown <= 0)
+            {
+
+                Hittable = true;
+                thisCollider.enabled = true;
+            }
+
         }
+       
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,16 +40,12 @@ public class QuickTestScript : MonoBehaviour
         {
             if (Hittable)
             {
-                thisCollider.enabled = true;
                 health--;
                 Hittable = false;
                 thisCollider.enabled = false;
-                HitCooldown = 1.5f;
+                HitCooldown = 0.8f;
             }
-            else if (HitCooldown <= 0)
-            {
-                Hittable = true;
-            }
+            
             if (health <= 0)
             {
                 gameObject.SetActive(false);    
