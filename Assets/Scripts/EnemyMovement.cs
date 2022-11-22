@@ -227,14 +227,6 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (CompareTag("player"))
-        {
-
-        }
-    }
-
     private void Stun()
     {
         m_agent.speed = 0;

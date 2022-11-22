@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField]
     private  Image[] HitPoints; //Physical ingame lifes
     public  int Lifes; // Value van de levens
+    public Collider enemyCollider;
 
     private void Start()
     {
@@ -17,7 +18,10 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-       
+        if (enemyCollider.gameObject.CompareTag("enemy"))
+        {
+            TakeDamage();
+        }
     }
 
     private void TakeDamage()
