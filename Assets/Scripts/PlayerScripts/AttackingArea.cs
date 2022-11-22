@@ -10,7 +10,6 @@ public class AttackingArea : MonoBehaviour
     [SerializeField]
     public float knockTime;
 
-    private bool IsColliding;
     
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -20,7 +19,6 @@ public class AttackingArea : MonoBehaviour
             Rigidbody2D enemy = other.GetComponent<Rigidbody2D>();
             if (enemy != null) //Checked if de enemy wel een rigidbody heeft.
             {
-
                 enemy.isKinematic = false; //Set kinematic op false.
                 Vector2 difference = enemy.transform.position;
                 difference = difference.normalized * thrust;  //returns difference with a magnitude of 1 and multiplies it by the current thrust. (Speed of the knockback)
@@ -31,7 +29,7 @@ public class AttackingArea : MonoBehaviour
         
         }
     }
-
+    //Found Error, work with layers tomorrow :)
     private IEnumerator KnockBackControler(Rigidbody2D enemy)
     {
         if (enemy != null)
