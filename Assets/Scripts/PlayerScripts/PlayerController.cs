@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-       
     [Header("Movement Stuff")]
     [SerializeField]
     private float MovementSpeed = 5;
@@ -32,6 +31,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject dashspot3;
 
+    [Header("Attacking Stuff")]
+
+    [SerializeField]
+    GameObject attackHitbox;
+    private bool isAttacking = false;
+
+
+
+
     //private Animation anim;
 
 
@@ -39,14 +47,17 @@ public class PlayerController : MonoBehaviour
     {
       //  anim = gameObject.GetComponent<Animation>();
         journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
+        attackHitbox.SetActive(false);
     }
 
     private void Update()
     {
-       // if (anim.isPlaying)
-       // {
-       //     return;
-       // }
+        // if (anim.isPlaying)
+        // {
+        //     return;
+        // }
+        
+
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -89,7 +100,25 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (Input.GetMouseButton(0))
+        {
+            isAttacking = true;
+            //Add Animation stuff here :)
+
+            StartCoroutine(DoAttack());
+        }
+
     }
+
+
+    IEnumerator DoAttack()
+	{
+        attackHitbox.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        attackHitbox.SetActive(false);
+        isAttacking = false;
+	}
+
     IEnumerator Dashing() //Coroutine zodat de dash smoothe gaat. Omdat ik de movement heb gehardcode.
     {
         Vector3 endpos = EndPosition.position;  //Saved de eind positie

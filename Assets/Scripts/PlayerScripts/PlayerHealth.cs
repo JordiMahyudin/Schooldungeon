@@ -15,6 +15,17 @@ public class PlayerHealth : MonoBehaviour
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
     }
 
+
+    private void TakeDamage(int amount)
+    {
+        Lifes -= amount;
+    }
+
+    private void Update()
+    {
+        UpdateHealth();
+    }
+
     public void UpdateHealth()
     {
         for (int i = 0; i < HitPoints.Length; i++)
@@ -41,6 +52,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Death()
     {
-
+        Destroy(gameObject);
     }
 }
