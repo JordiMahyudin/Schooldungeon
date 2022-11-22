@@ -12,8 +12,7 @@ public class QuickTestScript : MonoBehaviour
     {
         if (other.gameObject.name == "AttackHitbox")
         {
-            
-
+        
             health--;
             if (health <= 0)
             {
