@@ -15,10 +15,14 @@ public class PlayerHealth : MonoBehaviour
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
     }
 
-
-    private void TakeDamage(int amount)
+    private void OnTriggerEnter(Collider other)
     {
-        Lifes -= amount;
+       
+    }
+
+    private void TakeDamage()
+    {
+        Lifes --;
     }
 
     private void Update()
