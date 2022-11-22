@@ -5,10 +5,10 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public Transform[] m_wayPoints;
+    //public Transform[] m_wayPoints;
     public int m_speed;
-    private int MwayPointIndex;
-    private float Mdist;
+    //private int MwayPointIndex;
+    //private float Mdist;
 
     public float m_radius;
     [Range(0, 360)]
@@ -28,21 +28,41 @@ public class EnemyMovement : MonoBehaviour
     private GameObject[] HitPoints; //Physical ingame lifes
     public int Lifes; // Value van de levens
 
+    private bool m_playerInRange = false;
+    private bool m_canAttackPlayer = true;
+    [SerializeField] private float m_enemyCooldown;
+    [SerializeField] private int m_damage = 0;
+
+    private Animator anim;
+
+    [SerializeField] private bool m_ableToMove = true;
+    [SerializeField] private GameObject m_attack;
+
+    public NavMeshAgent m_agent;
+    [SerializeField] private float range;
+    [SerializeField] private Transform centrepoint;
+
 
     private void Start()
     {
-        MwayPointIndex = 0;
-        transform.LookAt(m_wayPoints[MwayPointIndex].position);
+        //MwayPointIndex = 0;
+        //transform.LookAt(m_wayPoints[MwayPointIndex].position);
         m_playerRef = GameObject.FindGameObjectWithTag("Target");
         StartCoroutine(FOVRoutine());
-        m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+        //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
+        anim = GetComponent<Animator>();
+        m_attack.SetActive(false);
+        m_agent = GetComponent<NavMeshAgent>();
+        m_agent.speed = m_speed;
     }
 
     private void Update()
     {
-        if (m_canSeePlayer == true)
+        
+        if (m_canSeePlayer && m_ableToMove == true)
         {
+            
             Vector3 dir = m_player.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
             Vector3 rotation = lookRotation.eulerAngles;
@@ -56,30 +76,59 @@ public class EnemyMovement : MonoBehaviour
             //    fireCountDown = 1f / fireRate;
             //}
             //fireCountDown -= Time.deltaTime;
+
+            if (m_canAttackPlayer == true)
+            {                            
+                StartCoroutine(AttackCooldown());
+            }
         }
 
         if (m_canSeePlayer == false)
         {
-            Mdist = Vector3.Distance(transform.position, m_wayPoints[MwayPointIndex].position);
+            //Mdist = Vector3.Distance(transform.position, m_wayPoints[MwayPointIndex].position);
 
-            if (Mdist < 2f)
+            //if (Mdist < 2f)
+            //{
+            //    IncreaseIndex();
+            //}
+            if (m_ableToMove == true)
             {
-                IncreaseIndex();
+                if (m_agent.remainingDistance <= m_agent.stoppingDistance)
+                {
+                Vector3 point;
+                if (RandomPoint(centrepoint.position, range, out point))
+                {
+                    Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+                    m_agent.SetDestination(point);
+                }
+                }
+
             }
         }
+
+        if (m_ableToMove == false)
+        {
+            Stun();
+        }
+
+        
 
     }
 
     void IncreaseIndex()
     {
-        MwayPointIndex++;
+        //if (m_ableToMove == true)
+        //{
+        //    MwayPointIndex++;
 
-        if (MwayPointIndex >= m_wayPoints.Length)
-        {
-            MwayPointIndex = 0;
-        }
-        //transform.LookAt(wayPoints[wayPointIndex].position);
-        m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+        //    if (MwayPointIndex >= m_wayPoints.Length)
+        //    {
+        //    MwayPointIndex = 0;
+        //    }
+        //    //transform.LookAt(wayPoints[wayPointIndex].position);
+        //    m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+
+        //}
     }
 
     private IEnumerator FOVRoutine()
@@ -93,12 +142,27 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    private IEnumerator AttackCooldown()
+    {
+        m_canAttackPlayer = false;
+        yield return new WaitForSeconds(m_enemyCooldown);
+        Attack();
+        yield return new WaitForSeconds(1f);
+        m_attack.SetActive(false);
+        m_ableToMove = true;
+        m_canAttackPlayer = true;
+        m_agent.speed = m_speed;
+        yield return new WaitForSeconds(m_enemyCooldown);
+    }
+
     private void FieldOfViewCheck()
     {
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, m_radius, m_targetMask);
-
-        if (rangeChecks.Length != 0)
+        if (m_ableToMove == true)
         {
+
+            if (rangeChecks.Length != 0)
+            {
             Transform target = rangeChecks[0].transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
 
@@ -111,33 +175,43 @@ public class EnemyMovement : MonoBehaviour
                 else
                 {
                     m_canSeePlayer = false;
-                    m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+                    //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
                 }
             }
             else
             {
                 m_canSeePlayer = false;
 
-                m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+                //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+            }
+            }
+            else if (m_canSeePlayer)
+            {
+            m_canSeePlayer = false;
+            //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
             }
         }
-        else if (m_canSeePlayer)
+    }
+
+    bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    {
+        Vector3 randompoint = center + Random.insideUnitSphere * range;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randompoint, out hit, 1.0f, NavMesh.AllAreas))
         {
-            m_canSeePlayer = false;
-            m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+            result = hit.position;
+            return true;
         }
+        result = Vector3.zero;
+        return false;
     }
 
     private void Attack()
     {
-        //GameObject bulletGo = (GameObject)Instantiate(knifePrefab, throwPoint.position, throwPoint.rotation);
-        //knife shot = bulletGo.GetComponent<knife>();
 
-        //if (shot != null)
+        m_attack.SetActive(true);
+        m_ableToMove = false;
 
-        //    shot.Seek(player);
-
-        
     }
 
     public void ReduceLife(int damage)
@@ -159,6 +233,11 @@ public class EnemyMovement : MonoBehaviour
         {
 
         }
+    }
+
+    private void Stun()
+    {
+        m_agent.speed = 0;
     }
 
    
