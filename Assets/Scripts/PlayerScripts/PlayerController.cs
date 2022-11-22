@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject attackHitbox;
     private bool isAttacking = false;
+    private bool AttackingCooldown = false;
+    private float TimeToAttack = 1f;
 
 
 
