@@ -9,13 +9,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float MovementSpeed = 5;
     [SerializeField]
-    private float DashSpeed = 1f; 
+    private float DashSpeed = 1f;
+    //[SerializeField]
+    //private bool currentlyMoving = false;
+    //Temporarly disabled untill i want to balance fighting 
 
     [Header("Dashing Stuff")]
     [SerializeField]
     private Transform EndPosition;  //Eindpositie van de dash voor de lerp
     [SerializeField]
-    private float DashingCooldown = 2.5f;
+    private float DashingCooldown = 1.8f;
     public bool dashOnCooldown = false;
     float dashLerp;  //Value van 0-1 voor de lerp
     private float journeyLength; //Hoe ver de lerp moet gaan.
@@ -44,11 +47,7 @@ public class PlayerController : MonoBehaviour
     GameObject DashHitbox;
     private bool hitboxDisabled;
     private float cooldown = 0.8f;
-
-
-
-
-    //private Animation anim;
+    private Animation anim;
 
 
     void Start()
@@ -59,38 +58,52 @@ public class PlayerController : MonoBehaviour
         DashHitbox.SetActive(false);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // if (anim.isPlaying)
         // {
         //     return;
         // }
-        
-
 
         if (Input.GetKey(KeyCode.W))
         {
             EndPosition = dashspot.transform; //Sets it to the position you need to dash to
             transform.position += transform.forward * MovementSpeed * Time.deltaTime;
         }
+        //else if (!Input.GetKey(KeyCode.W)) 
+        //{
+        //    currentlyMoving = false;
+        //}
         
+        //use this if i want to balance the fact that the player cannot move when attacking :)
+
         if (Input.GetKey(KeyCode.S))
         {
             EndPosition = dashspot3.transform; //Sets it to the position you need to dash to
             transform.position -= transform.forward * MovementSpeed * Time.deltaTime;
         }
+
+
         if (Input.GetKey(KeyCode.D))
         {
             EndPosition = dashspot1.transform; //Sets it to the position you need to dash to
             transform.position += transform.right * MovementSpeed * Time.deltaTime;
         }
+        
+
         if (Input.GetKey(KeyCode.A))
         {
 
             EndPosition = dashspot2.transform; //Sets it to the position you need to dash to
             transform.position -= transform.right * MovementSpeed * Time.deltaTime;
         }
+       
 
+
+    }
+
+    private void Update()
+    {
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -106,16 +119,15 @@ public class PlayerController : MonoBehaviour
             if (DashingCooldown <= 0f)
             {
                 dashOnCooldown = false;
-                DashingCooldown = 2.5f;
+                DashingCooldown = 1.8f;
             }
         }
 
         if (Input.GetMouseButton(0))
         {
-            isAttacking = true;
-            //Add Animation stuff here :)
-
-            StartCoroutine(DoAttack());
+                isAttacking = true;
+                //Add Animation stuff here :)
+                StartCoroutine(DoAttack());
         }
     }
     IEnumerator DoAttack()

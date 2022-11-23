@@ -5,6 +5,8 @@ using UnityEngine;
 public class QuickTestScript : MonoBehaviour
 {
 
+    //THIS IS A QUICK TEST SCRIPT SO THE ENEMY CAN TAKE DAMAGE FOR TESTING (PLEASE DO NOT RELY ON THIS SCRIPT FOR ENEMY HEALTH BECAUSE I MADE IT WITHIN 2 MINUTES)
+
    public int health = 3;
 
     public bool Hittable = true;
@@ -12,8 +14,6 @@ public class QuickTestScript : MonoBehaviour
 
     [SerializeField]
     private Collider thisCollider;
-    
-
 
     private void Update()
     {
@@ -29,11 +29,9 @@ public class QuickTestScript : MonoBehaviour
                 Hittable = true;
                 thisCollider.enabled = true;
             }
-
         }
-       
     }
-
+    //Again please do not use this for the real game its simply just a test (take inspiration but the script isnt polished enough to be used :) )
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "AttackHitbox")

@@ -9,26 +9,24 @@ public class AttackingArea : MonoBehaviour
     public float thrust;
     [SerializeField]
     public float knockTime;
-
-    
+    [SerializeField]
+    private GameObject AttackCollider;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("enemy")) //Kijk of de tag gelijk is aan enemy
+        if (other.CompareTag("enemy") && AttackCollider.activeInHierarchy) //Kijk of de tag gelijk is aan enemy
         {
-            Rigidbody enemy = other.GetComponent<Rigidbody>();
-            if (enemy != null) //Checked if de enemy wel een rigidbody heeft.
-            {
-                enemy.isKinematic = false; //Set kinematic op false.
-                Vector2 difference = enemy.transform.position;
-                difference = difference.normalized * thrust;  //returns difference with a magnitude of 1 and multiplies it by the current thrust. (Speed of the knockback)
-                enemy.AddForce(difference, ForceMode.Impulse); //Adds force aan de enemy zodat hij knockbacked
-                StartCoroutine(KnockBackControler(enemy));
-            }
-        
+                Rigidbody enemy = other.GetComponent<Rigidbody>();
+                if (enemy != null) //Checked if de enemy wel een rigidbody heeft.
+                {
+                    enemy.isKinematic = false; //Set kinematic op false.
+                    Vector2 difference = enemy.transform.position;
+                    difference = difference.normalized * thrust;  //returns difference with a magnitude of 1 and multiplies it by the current thrust. (Speed of the knockback)
+                    enemy.AddForce(difference, ForceMode.Impulse); //Adds force aan de enemy zodat hij knockbacked
+                    StartCoroutine(KnockBackControler(enemy));
+                }
         }
     }
-    //Found Error, work with layers tomorrow :)
     private IEnumerator KnockBackControler(Rigidbody enemy)
     {
         if (enemy != null)
@@ -37,7 +35,6 @@ public class AttackingArea : MonoBehaviour
             enemy.velocity = Vector2.zero;
             enemy.isKinematic = true;
         }
-       
     }
 }
 
