@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject DashHitbox;
     private bool hitboxDisabled;
+    private float cooldown = 0.8f;
 
 
 
@@ -128,7 +129,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator perfectDashing()
     {
         DashHitbox.SetActive(true);
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(cooldown);
         DashHitbox.SetActive(false);
 
     }
