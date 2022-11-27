@@ -24,7 +24,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    private void TakeDamage()
+    public void TakeDamage()
     {
         Lifes --;
     }

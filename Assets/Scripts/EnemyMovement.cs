@@ -37,11 +37,16 @@ public class EnemyMovement : MonoBehaviour
 
     [SerializeField] private bool m_ableToMove = true;
     [SerializeField] private GameObject m_attack;
+    [SerializeField] private BoxCollider boxCollider;
 
     public NavMeshAgent m_agent;
     [SerializeField] private float range;
     [SerializeField] private Transform centrepoint;
 
+    private PlayerHealth ph;
+
+    [SerializeField] private int health;
+    [SerializeField] private int playerDamage;
 
     private void Start()
     {
@@ -55,13 +60,15 @@ public class EnemyMovement : MonoBehaviour
         m_attack.SetActive(false);
         m_agent = GetComponent<NavMeshAgent>();
         m_agent.speed = m_speed;
+        ph = GameObject.FindGameObjectWithTag("Target").GetComponent<PlayerHealth>();
+        boxCollider.isTrigger = false;
     }
 
     private void Update()
     {
         
         if (m_canSeePlayer && m_ableToMove == true)
-        {
+        {          
             
             Vector3 dir = m_player.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
@@ -69,7 +76,7 @@ public class EnemyMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
             m_Enemy.SetDestination(m_player.position);
-
+            
             //if (fireCountDown <= 0f)
             //{
             //    Attack();
@@ -78,7 +85,8 @@ public class EnemyMovement : MonoBehaviour
             //fireCountDown -= Time.deltaTime;
 
             if (m_canAttackPlayer == true)
-            {                            
+            {
+                
                 StartCoroutine(AttackCooldown());
             }
         }
@@ -111,7 +119,10 @@ public class EnemyMovement : MonoBehaviour
             Stun();
         }
 
-        
+        if (health <= 0)
+        {
+            Death();
+        }
 
     }
 
@@ -149,6 +160,7 @@ public class EnemyMovement : MonoBehaviour
         Attack();
         yield return new WaitForSeconds(1f);
         m_attack.SetActive(false);
+        boxCollider.isTrigger = false;
         m_ableToMove = true;
         m_canAttackPlayer = true;
         m_agent.speed = m_speed;
@@ -172,6 +184,7 @@ public class EnemyMovement : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, m_obstructionMask))
                     m_canSeePlayer = true;
+                    
                 else
                 {
                     m_canSeePlayer = false;
@@ -208,9 +221,10 @@ public class EnemyMovement : MonoBehaviour
 
     private void Attack()
     {
-
-        m_attack.SetActive(true);
         m_ableToMove = false;
+        boxCollider.isTrigger = true;
+        m_attack.SetActive(true);
+        
 
     }
 
@@ -232,5 +246,27 @@ public class EnemyMovement : MonoBehaviour
         m_agent.speed = 0;
     }
 
-   
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Target"))
+        {
+            Debug.Log("enemy");
+            ph.GetComponent<PlayerHealth>().TakeDamage();
+        }
+
+        if (other.gameObject.CompareTag("Attack"))
+        {
+            TakeDamage(playerDamage);
+        }
+    }
+
+    void TakeDamage(int damage)
+    {
+        health -= damage;
+    }
+
+    void Death()
+    {
+        Destroy(gameObject);
+    }
 }
