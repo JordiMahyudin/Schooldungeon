@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -668,6 +668,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6755644a976a748a16784e2a69ebe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: b3934ab9d481fcf45a29a126e099a4ee, type: 2}
+  duration: 0.1
   health: 3
   Hittable: 1
   HitCooldown: 0.8
@@ -683,8 +685,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.0561061, y: 1.3034, z: 1.5567068}
+  m_Center: {x: 0.028053045, y: 0.69845986, z: -0.11737797}
 --- !u!54 &863405483
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -810,8 +812,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042901987}
   m_LocalRotation: {x: 0.27059805, y: 0.6532815, z: -0.27059805, w: 0.6532815}
-  m_LocalPosition: {x: 0.09288058, y: 0.718, z: -0.060448736}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.12, y: 0.74, z: -0.06}
+  m_LocalScale: {x: 4, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1623592512}
@@ -858,9 +860,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2832cf0ff42743f49a95cfe28e486230, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b4d961f702cbde646b77ac94d15761d3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2, y: 2}
@@ -1268,8 +1270,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1.2647369, z: 1}
+  m_Center: {x: 0, y: 0.5089625, z: 0}
 --- !u!54 &1623592510
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1298,10 +1300,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6755644a976a748a16784e2a69ebe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: b3934ab9d481fcf45a29a126e099a4ee, type: 2}
+  duration: 0.1
   health: 3
   Hittable: 1
   HitCooldown: 0.8
-  thisCollider: {fileID: 1623592509}
+  thisCollider: {fileID: 863405482}
 --- !u!4 &1623592512
 Transform:
   m_ObjectHideFlags: 0
@@ -1376,9 +1380,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2832cf0ff42743f49a95cfe28e486230, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b4d961f702cbde646b77ac94d15761d3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2, y: 2}
@@ -1395,8 +1399,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695890310}
   m_LocalRotation: {x: 0.27059805, y: 0.6532815, z: -0.27059805, w: 0.6532815}
-  m_LocalPosition: {x: 0.09288058, y: 0.718, z: -0.060448736}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.17, y: 0.79, z: -0.06}
+  m_LocalScale: {x: 4, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 863405480}
@@ -1530,6 +1534,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6755644a976a748a16784e2a69ebe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 0}
+  duration: 0
   health: 3
   Hittable: 1
   HitCooldown: 0.8
