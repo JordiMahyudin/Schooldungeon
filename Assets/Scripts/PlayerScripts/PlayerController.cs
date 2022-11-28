@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public AttackingArea aaScript;
+
     [Header("Movement Stuff")]
     [SerializeField]
     private float MovementSpeed = 5;
@@ -34,10 +37,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject dashspot3;
 
+    [Header("AttackhitboxLocation")]
+  
+    public GameObject attackhitboxRight;
+    public GameObject attackhitboxLeft;
+    public GameObject attackhitboxUp;
+    public GameObject attackhitboxDown;
+ 
+
     [Header("Attacking Stuff")]
 
     [SerializeField]
-    GameObject attackHitbox;
+    private GameObject attackHitbox;
     private bool isAttacking = false;
     private bool AttackingCooldown = false;
     private float TimeToAttack = 1f;
@@ -60,25 +71,25 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // if (anim.isPlaying)
-        // {
-        //     return;
-        // }
 
         if (Input.GetKey(KeyCode.W))
         {
+            aaScript.AttackCollider = attackhitboxUp;
+            if (isAttacking != true)
+            {
+                attackHitbox = attackhitboxUp;
+            }
             EndPosition = dashspot.transform; //Sets it to the position you need to dash to
             transform.position += transform.forward * MovementSpeed * Time.deltaTime;
         }
-        //else if (!Input.GetKey(KeyCode.W)) 
-        //{
-        //    currentlyMoving = false;
-        //}
-        
-        //use this if i want to balance the fact that the player cannot move when attacking :)
 
         if (Input.GetKey(KeyCode.S))
         {
+            aaScript.AttackCollider = attackhitboxDown;
+            if (isAttacking != true)
+            {
+                attackHitbox = attackhitboxDown;
+            }
             EndPosition = dashspot3.transform; //Sets it to the position you need to dash to
             transform.position -= transform.forward * MovementSpeed * Time.deltaTime;
         }
@@ -86,6 +97,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.D))
         {
+            aaScript.AttackCollider = attackhitboxRight;
+            if (isAttacking != true)
+            {
+                attackHitbox = attackhitboxRight;
+            }
             EndPosition = dashspot1.transform; //Sets it to the position you need to dash to
             transform.position += transform.right * MovementSpeed * Time.deltaTime;
         }
@@ -93,7 +109,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.A))
         {
-
+            aaScript.AttackCollider = attackhitboxLeft;
+            if (isAttacking != true)
+            {
+                attackHitbox = attackhitboxLeft;
+            }
             EndPosition = dashspot2.transform; //Sets it to the position you need to dash to
             transform.position -= transform.right * MovementSpeed * Time.deltaTime;
         }
@@ -123,7 +143,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
                 isAttacking = true;
                 //Add Animation stuff here :)
