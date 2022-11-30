@@ -59,6 +59,10 @@ public class PlayerController : MonoBehaviour
     private bool hitboxDisabled;
     private float cooldown = 0.8f;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    private Animation anim;
+>>>>>>> parent of fd1c3fd (PUSH)
 =======
     private Animation anim;
 >>>>>>> parent of fd1c3fd (PUSH)
@@ -71,7 +75,10 @@ public class PlayerController : MonoBehaviour
         attackHitbox.SetActive(false);
         DashHitbox.SetActive(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
         animator = GetComponent<Animator>();
+=======
+>>>>>>> parent of fd1c3fd (PUSH)
 =======
 >>>>>>> parent of fd1c3fd (PUSH)
     }
