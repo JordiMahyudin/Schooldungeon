@@ -66,7 +66,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void Update()
     {
-        
+        //movement
         if (m_canSeePlayer && m_ableToMove == true)
         {          
             
@@ -144,6 +144,7 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator FOVRoutine()
     {
+        //will constantly check if player is in line of sights
         WaitForSeconds wait = new WaitForSeconds(0.2f);
 
         while (true)
@@ -155,6 +156,7 @@ public class EnemyMovement : MonoBehaviour
 
     private IEnumerator AttackCooldown()
     {
+        //enemy will attack with these things happening
         m_canAttackPlayer = false;
         yield return new WaitForSeconds(m_enemyCooldown);
         Attack();
@@ -169,6 +171,7 @@ public class EnemyMovement : MonoBehaviour
 
     private void FieldOfViewCheck()
     {
+        //enemy has a radius and a field of view, the enemy will walk towards the player when in line of sights
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, m_radius, m_targetMask);
         if (m_ableToMove == true)
         {
@@ -208,6 +211,7 @@ public class EnemyMovement : MonoBehaviour
 
     bool RandomPoint(Vector3 center, float range, out Vector3 result)
     {
+        //mark random point and will walk to this location
         Vector3 randompoint = center + Random.insideUnitSphere * range;
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randompoint, out hit, 1.0f, NavMesh.AllAreas))
@@ -230,6 +234,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void ReduceLife(int damage)
     {
+        //enemy takes health bij specific number, and dies when belowe 1
         if (Lifes >= 1)
         {
             Lifes -= damage; //Takes a life when damage taken (use damage for enemies)
@@ -243,11 +248,13 @@ public class EnemyMovement : MonoBehaviour
 
     private void Stun()
     {
+        //enemy unable to move
         m_agent.speed = 0;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        //player takes damage
         if (other.gameObject.CompareTag("Target"))
         {
             Debug.Log("enemy");
@@ -260,11 +267,13 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    //takes damage
     void TakeDamage(int damage)
     {
         health -= damage;
     }
 
+    //destroy object
     void Death()
     {
         Destroy(gameObject);
