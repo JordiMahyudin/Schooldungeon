@@ -50,24 +50,31 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject attackHitbox;
     private bool isAttacking = false;
-    //private bool AttackingCooldown = false;
-  //  private float TimeToAttack = 1f;
+    private bool AttackingCooldown = false;
+    private float TimeToAttack = 1f;
 
     [Header("Perfect Dashing")]
     [SerializeField]
     GameObject DashHitbox;
-    //private bool hitboxDisabled;
+    private bool hitboxDisabled;
     private float cooldown = 0.8f;
+<<<<<<< HEAD
+=======
+    private Animation anim;
+>>>>>>> parent of fd1c3fd (PUSH)
 
 
     void Start()
     {
+      //  anim = gameObject.GetComponent<Animation>();
         journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
         attackHitbox.SetActive(false);
         DashHitbox.SetActive(false);
+<<<<<<< HEAD
         animator = GetComponent<Animator>();
+=======
+>>>>>>> parent of fd1c3fd (PUSH)
     }
-
 
     private void FixedUpdate()
     {
@@ -99,7 +106,6 @@ public class PlayerController : MonoBehaviour
             }
             EndPosition = dashspot3.transform; //Sets it to the position you need to dash to
             transform.position -= transform.forward * MovementSpeed * Time.deltaTime;
-             
         }
 
 
@@ -125,6 +131,9 @@ public class PlayerController : MonoBehaviour
             EndPosition = dashspot2.transform; //Sets it to the position you need to dash to
             transform.position -= transform.right * MovementSpeed * Time.deltaTime;
         }
+       
+
+
     }
 
     private void Update()
