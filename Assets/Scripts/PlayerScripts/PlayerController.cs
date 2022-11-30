@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
+    private Animator animator;
     public AttackingArea aaScript;
 
     [Header("Movement Stuff")]
@@ -60,24 +60,22 @@ public class PlayerController : MonoBehaviour
     private float cooldown = 0.8f;
 
 
-    [Header("Animation Stuff")]
-    private Animator ForwardWalkingAnim;
-
-
     void Start()
     {
         journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
         attackHitbox.SetActive(false);
         DashHitbox.SetActive(false);
-        ForwardWalkingAnim = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
 
     private void FixedUpdate()
     {
+        
 
         if (Input.GetKey(KeyCode.W))
         {
+            animator.SetBool("Back", true);
             aaScript.AttackCollider = attackhitboxUp;
             if (isAttacking != true)
             {
@@ -85,8 +83,12 @@ public class PlayerController : MonoBehaviour
             }
             EndPosition = dashspot.transform; //Sets it to the position you need to dash to
             transform.position += transform.forward * MovementSpeed * Time.deltaTime;
-            
         }
+        else
+        {
+            animator.SetBool("Back", true);
+        }
+        
 
         if (Input.GetKey(KeyCode.S))
         {
