@@ -258,7 +258,7 @@ public class EnemyMovement : MonoBehaviour
         if (other.gameObject.CompareTag("Target"))
         {
             Debug.Log("enemy");
-            ph.GetComponent<PlayerHealth>().TakeDamage();
+            ph.GetComponent<PlayerHealth>().TakeDamage(1);
         }
 
         if (other.gameObject.CompareTag("Attack"))
