@@ -2,38 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] HitPoints; //Physical ingame lifes
-    public int Lifes; // Value van de levens
+    private  Image[] HitPoints; //Physical ingame lifes
+    public  int Lifes; // Value van de levens
 
     private void Start()
     {
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
     }
 
-    void Update()
+ 
+    public void TakeDamage(int amount)
     {
-        
+        Lifes -= amount;
     }
 
-    public void ReduceLife(int damage)
+    private void Update()
     {
-        if (Lifes >= 1)
+        UpdateHealth();
+    }
+
+    public void UpdateHealth()
+    {
+        for (int i = 0; i < HitPoints.Length; i++)
         {
-            Lifes -= damage; //Takes a life when damage taken (use damage for enemies)
-            Destroy(HitPoints[Lifes].gameObject); //Destroys hitpoint when damage was taken
-            if (Lifes < 1)
+            if (i < Lifes)
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //Temporarly added this so it reloads the scene whenever all lifes are gone
+                HitPoints[i].color = Color.red;
             }
+            else
+            {
+                HitPoints[i].color = Color.black;
+            }
+        }
+        if (Lifes <= 0)
+        {
+            Death();
         }
     }    
 
-    private void getExtraLife()
+    private void GetExtraLife()
     {
         //Add code whenever you get a pickup you get an extra life back
+    }
+
+    private void Death()
+    {
+        Destroy(gameObject);
     }
 }
