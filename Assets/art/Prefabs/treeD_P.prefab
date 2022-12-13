@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 2451636573216129320}
   - component: {fileID: 1561110712991370893}
   - component: {fileID: 3625075156394228295}
+  - component: {fileID: 7546445691266605295}
   m_Layer: 0
   m_Name: TreeTrunkD_M
   m_TagString: Untagged
@@ -415,6 +416,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7546445691266605295
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2976359103268854674}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2317147, y: 7.3608556, z: 1.231715}
+  m_Center: {x: 0, y: 3.6804278, z: -0.000000029802322}
 --- !u!1 &3026690705268457421
 GameObject:
   m_ObjectHideFlags: 0
