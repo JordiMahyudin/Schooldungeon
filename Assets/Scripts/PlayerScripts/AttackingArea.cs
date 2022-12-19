@@ -14,12 +14,6 @@ public class AttackingArea : MonoBehaviour
 
     public PlayerController Pcontroller;
 
-
-    
-
-
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("enemy") && Pcontroller.attackhitboxRight.activeInHierarchy) //Kijk of de tag gelijk is aan enemy
