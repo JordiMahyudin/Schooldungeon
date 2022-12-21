@@ -9,6 +9,7 @@ public class NewEnemyMovement : MonoBehaviour
     public int m_speed;
 
     public float m_radius;
+    public float m_AttackRadius;
     [Range(0, 360)]
     public float m_angle;
 
@@ -68,15 +69,15 @@ public class NewEnemyMovement : MonoBehaviour
             Vector3 dir = m_player.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
             Vector3 rotation = lookRotation.eulerAngles;
-            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+            //transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
             m_Enemy.SetDestination(m_player.position);
 
-            if (m_canAttackPlayer == true)
-            {
+            //if (m_canAttackPlayer == true)
+            //{
 
-                StartCoroutine(AttackCooldown());
-            }
+            //    StartCoroutine(AttackCooldown());
+            //}
         }
 
         if (m_ableToMove == false)
@@ -122,9 +123,13 @@ public class NewEnemyMovement : MonoBehaviour
     {
         //enemy has a radius and a field of view, the enemy will walk towards the player when in line of sights
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, m_radius, m_targetMask);
+        Collider[] attackRange = Physics.OverlapSphere(transform.position, m_AttackRadius, m_targetMask);
         if (m_ableToMove == true)
         {
-
+            if (attackRange.Length != 0)
+            {
+                StartCoroutine(AttackCooldown());
+            }
             if (rangeChecks.Length != 0)
             {
                 Transform target = rangeChecks[0].transform;

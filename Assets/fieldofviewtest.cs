@@ -10,6 +10,7 @@ public class Fieldofviewtest : Editor
         NewEnemyMovement fov = (NewEnemyMovement)target;
         Handles.color = Color.white;
         Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.m_radius);
+        Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov.m_AttackRadius);
 
         Vector3 viewAngle01 = DirectionFromAngle(fov.transform.eulerAngles.y, -fov.m_angle / 2);
         Vector3 viewAngle02 = DirectionFromAngle(fov.transform.eulerAngles.y, fov.m_angle / 2);
