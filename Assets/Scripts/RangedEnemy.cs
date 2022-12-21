@@ -81,23 +81,23 @@ public class RangedEnemy : MonoBehaviour
             }
         }
 
-        if (m_canSeePlayer == false)
-        {
+        //if (m_canSeePlayer == false)
+        //{
 
-            if (m_ableToMove == true)
-            {
-                if (m_agent.remainingDistance <= m_agent.stoppingDistance)
-                {
-                    Vector3 point;
-                    if (RandomPoint(centrepoint.position, range, out point))
-                    {
-                        Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
-                        m_agent.SetDestination(point);
-                    }
-                }
+        //    if (m_ableToMove == true)
+        //    {
+        //        if (m_agent.remainingDistance <= m_agent.stoppingDistance)
+        //        {
+        //            Vector3 point;
+        //            if (RandomPoint(centrepoint.position, range, out point))
+        //            {
+        //                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+        //                m_agent.SetDestination(point);
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
         if (m_ableToMove == false)
         {
@@ -172,19 +172,19 @@ public class RangedEnemy : MonoBehaviour
     }
     
 
-    bool RandomPoint(Vector3 center, float range, out Vector3 result)
-    {
-        //mark random point and will walk to this location
-        Vector3 randompoint = center + Random.insideUnitSphere * range;
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randompoint, out hit, 1.0f, NavMesh.AllAreas))
-        {
-            result = hit.position;
-            return true;
-        }
-        result = Vector3.zero;
-        return false;
-    }
+    //bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    //{
+    //    //mark random point and will walk to this location
+    //    Vector3 randompoint = center + Random.insideUnitSphere * range;
+    //    NavMeshHit hit;
+    //    if (NavMesh.SamplePosition(randompoint, out hit, 1.0f, NavMesh.AllAreas))
+    //    {
+    //        result = hit.position;
+    //        return true;
+    //    }
+    //    result = Vector3.zero;
+    //    return false;
+    //}
 
     private void Attack()
     {

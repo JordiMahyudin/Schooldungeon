@@ -5,12 +5,10 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    //public Transform[] m_wayPoints;
     public int m_speed;
-    //private int MwayPointIndex;
-    //private float Mdist;
 
     public float m_radius;
+    public float m_AttackRadius;
     [Range(0, 360)]
     public float m_angle;
 
@@ -36,11 +34,8 @@ public class EnemyMovement : MonoBehaviour
     private Animator anim;
 
     [SerializeField] private bool m_ableToMove = true;
-    [SerializeField] private GameObject m_attack;
-    [SerializeField] private BoxCollider boxCollider;
-
     public NavMeshAgent m_agent;
-    [SerializeField] private float range;
+    //[SerializeField] private float range;
     [SerializeField] private Transform centrepoint;
 
     private PlayerHealth ph;
@@ -48,70 +43,47 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private int health;
     [SerializeField] private int playerDamage;
 
+    private float m_OldPosition = 0.0f;
+    private bool forward;
+
+    [SerializeField] private Animator animator;
+
+    [SerializeField] private GameObject m_AttackPrefab;
+    [SerializeField] private Transform m_SpawnPos;
+    private Transform playeposition;
+    [SerializeField] private BoxCollider box;
+
     private void Start()
     {
-        //MwayPointIndex = 0;
-        //transform.LookAt(m_wayPoints[MwayPointIndex].position);
         m_playerRef = GameObject.FindGameObjectWithTag("Target");
         StartCoroutine(FOVRoutine());
-        //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
         anim = GetComponent<Animator>();
-        m_attack.SetActive(false);
         m_agent = GetComponent<NavMeshAgent>();
         m_agent.speed = m_speed;
         ph = GameObject.FindGameObjectWithTag("Target").GetComponent<PlayerHealth>();
-        boxCollider.isTrigger = false;
+        box.isTrigger = true;
+        m_OldPosition = transform.position.z;
     }
 
     private void Update()
     {
         //movement
-        if (m_canSeePlayer && m_ableToMove == true)
-        {          
-            
+        if (m_canSeePlayer)
+        {
+
             Vector3 dir = m_player.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
             Vector3 rotation = lookRotation.eulerAngles;
-            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+            //transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
             m_Enemy.SetDestination(m_player.position);
-            
-            //if (fireCountDown <= 0f)
+
+            //if (m_canAttackPlayer == true)
             //{
-            //    Attack();
-            //    fireCountDown = 1f / fireRate;
+
+            //    StartCoroutine(AttackCooldown());
             //}
-            //fireCountDown -= Time.deltaTime;
-
-            if (m_canAttackPlayer == true)
-            {
-                
-                StartCoroutine(AttackCooldown());
-            }
-        }
-
-        if (m_canSeePlayer == false)
-        {
-            //Mdist = Vector3.Distance(transform.position, m_wayPoints[MwayPointIndex].position);
-
-            //if (Mdist < 2f)
-            //{
-            //    IncreaseIndex();
-            //}
-            if (m_ableToMove == true)
-            {
-                if (m_agent.remainingDistance <= m_agent.stoppingDistance)
-                {
-                Vector3 point;
-                if (RandomPoint(centrepoint.position, range, out point))
-                {
-                    Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
-                    m_agent.SetDestination(point);
-                }
-                }
-
-            }
         }
 
         if (m_ableToMove == false)
@@ -124,22 +96,40 @@ public class EnemyMovement : MonoBehaviour
             Death();
         }
 
-    }
+        if (transform.position.z > m_OldPosition)
+        {
+            //walks
+            forward = true;
+            animator.SetBool("WalkingForward", true);
+        }
+        else
+        {
+            animator.SetBool("WalkingForward", false);
+        }
 
-    void IncreaseIndex()
-    {
-        //if (m_ableToMove == true)
-        //{
-        //    MwayPointIndex++;
+        if (transform.position.z < m_OldPosition)
+        {
+            //walks backwards
+            forward = false;
+            animator.SetBool("WalkingBack", true);
+        }
+        else
+        {
+            animator.SetBool("WalkingBack", false);
+        }
 
-        //    if (MwayPointIndex >= m_wayPoints.Length)
-        //    {
-        //    MwayPointIndex = 0;
-        //    }
-        //    //transform.LookAt(wayPoints[wayPointIndex].position);
-        //    m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+        if (forward == true)
+        {
+            animator.SetBool("Forward", true);
+        }
+        else
+        {
+            animator.SetBool("Forward", false);
+        }
 
-        //}
+        m_OldPosition = transform.position.z;
+        playeposition = m_player.transform;
+
     }
 
     private IEnumerator FOVRoutine()
@@ -159,10 +149,12 @@ public class EnemyMovement : MonoBehaviour
         //enemy will attack with these things happening
         m_canAttackPlayer = false;
         yield return new WaitForSeconds(m_enemyCooldown);
+        box.isTrigger = false;
         Attack();
+        box.isTrigger = true;
         yield return new WaitForSeconds(1f);
-        m_attack.SetActive(false);
-        boxCollider.isTrigger = false;
+        animator.SetBool("BackAttack", false);
+        animator.SetBool("ForwardAttack", false);
         m_ableToMove = true;
         m_canAttackPlayer = true;
         m_agent.speed = m_speed;
@@ -173,63 +165,67 @@ public class EnemyMovement : MonoBehaviour
     {
         //enemy has a radius and a field of view, the enemy will walk towards the player when in line of sights
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, m_radius, m_targetMask);
+        Collider[] attackRange = Physics.OverlapSphere(transform.position, m_AttackRadius, m_targetMask);
         if (m_ableToMove == true)
         {
-
+            if (attackRange.Length != 0)
+            {
+                StartCoroutine(AttackCooldown());
+            }
             if (rangeChecks.Length != 0)
             {
-            Transform target = rangeChecks[0].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
+                Transform target = rangeChecks[0].transform;
+                Vector3 directionToTarget = (target.position - transform.position).normalized;
 
-            if (Vector3.Angle(transform.forward, directionToTarget) < m_angle / 2)
-            {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+                if (Vector3.Angle(transform.forward, directionToTarget) < m_angle / 2)
+                {
+                    float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, m_obstructionMask))
-                    m_canSeePlayer = true;
-                    
+                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, m_obstructionMask))
+                        m_canSeePlayer = true;
+
+                    else
+                    {
+                        m_canSeePlayer = false;
+                        //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+                    }
+                }
                 else
                 {
                     m_canSeePlayer = false;
+
                     //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
                 }
             }
-            else
-            {
-                m_canSeePlayer = false;
-
-                //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
-            }
-            }
             else if (m_canSeePlayer)
             {
-            m_canSeePlayer = false;
-            //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
+                m_canSeePlayer = false;
+                //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
             }
         }
-    }
-
-    bool RandomPoint(Vector3 center, float range, out Vector3 result)
-    {
-        //mark random point and will walk to this location
-        Vector3 randompoint = center + Random.insideUnitSphere * range;
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randompoint, out hit, 1.0f, NavMesh.AllAreas))
-        {
-            result = hit.position;
-            return true;
-        }
-        result = Vector3.zero;
-        return false;
     }
 
     private void Attack()
     {
-        m_ableToMove = false;
-        boxCollider.isTrigger = true;
-        m_attack.SetActive(true);
-        
+        if (forward == true)
+        {
+            animator.SetBool("ForwardAttack", true);
+        }
 
+        if (forward == false)
+        {
+            animator.SetBool("BackAttack", true);
+        }
+
+        m_ableToMove = false;
+        //GameObject shot = (GameObject)Instantiate(m_AttackPrefab, m_SpawnPos.position, m_SpawnPos.rotation);
+        //Arrow arrow = shot.GetComponent<Arrow>();
+        //if (arrow != null)
+        //{
+        //    arrow.Seek(playeposition);
+        //}
+       GameObject shoot = Instantiate(m_AttackPrefab, m_SpawnPos.position, Quaternion.identity);
+        Destroy(shoot, 3);
     }
 
     public void ReduceLife(int damage)
@@ -254,12 +250,6 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //player takes damage
-        if (other.gameObject.CompareTag("Target"))
-        {
-            Debug.Log("enemy");
-            ph.GetComponent<PlayerHealth>().TakeDamage(1);
-        }
 
         if (other.gameObject.CompareTag("Attack"))
         {

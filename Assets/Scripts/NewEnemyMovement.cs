@@ -255,11 +255,11 @@ public class NewEnemyMovement : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //player takes damage
-        if (other.gameObject.CompareTag("Target"))
-        {
-            Debug.Log("enemy");
-            ph.GetComponent<PlayerHealth>().TakeDamage(1);
-        }
+        //if (other.gameObject.CompareTag("Target"))
+        //{
+        //    Debug.Log("enemy");
+        //    ph.GetComponent<PlayerHealth>().TakeDamage(1);
+        //}
 
         if (other.gameObject.CompareTag("Attack"))
         {
