@@ -47,6 +47,11 @@ public class NewEnemyMovement : MonoBehaviour
     [SerializeField] private int health;
     [SerializeField] private int playerDamage;
 
+    private float m_OldPosition = 0.0f;
+    private bool forward;
+
+    [SerializeField] private Animator animator;
+
     private void Start()
     {
         m_playerRef = GameObject.FindGameObjectWithTag("Target");
@@ -58,6 +63,7 @@ public class NewEnemyMovement : MonoBehaviour
         m_agent.speed = m_speed;
         ph = GameObject.FindGameObjectWithTag("Target").GetComponent<PlayerHealth>();
         boxCollider.isTrigger = false;
+        m_OldPosition = transform.position.z;
     }
 
     private void Update()
@@ -90,6 +96,39 @@ public class NewEnemyMovement : MonoBehaviour
             Death();
         }
 
+        if (transform.position.z > m_OldPosition)
+        {
+            //walks
+            forward = true;
+            animator.SetBool("WalkingForward", true);
+        }
+        else
+        {
+            animator.SetBool("WalkingForward", false);
+        }
+
+        if (transform.position.z < m_OldPosition)
+        {
+            //walks backwards
+            forward = false;
+            animator.SetBool("WalkingBack", true);
+        }
+        else
+        {
+            animator.SetBool("WalkingBack", false);
+        }
+
+        if (forward == true)
+        {
+            animator.SetBool("Forward", true);
+        }
+        else
+        {
+            animator.SetBool("Forward", false);
+        }
+
+        m_OldPosition = transform.position.z;
+
     }
 
     private IEnumerator FOVRoutine()
@@ -111,6 +150,8 @@ public class NewEnemyMovement : MonoBehaviour
         yield return new WaitForSeconds(m_enemyCooldown);
         Attack();
         yield return new WaitForSeconds(1f);
+        animator.SetBool("BackAttack", false);
+        animator.SetBool("ForwardAttack", false);
         m_attack.SetActive(false);
         boxCollider.isTrigger = false;
         m_ableToMove = true;
@@ -165,10 +206,29 @@ public class NewEnemyMovement : MonoBehaviour
 
     private void Attack()
     {
+        if(forward == true)
+        {
+            animator.SetBool("ForwardAttack", true);            
+        }
+        //else
+        //{
+        //    animator.SetBool("ForwardAttack", false);
+        //}
+         if (forward == false)
+         {
+            animator.SetBool("BackAttack", true);
+         }
+        //else
+        //{
+        //    animator.SetBool("BackAttack", false);
+        //}
+
         m_ableToMove = false;
         boxCollider.isTrigger = true;
         m_attack.SetActive(true);
 
+        //animator.SetBool("BackAttack", false);
+        //animator.SetBool("ForwardAttack", false);
 
     }
 
