@@ -61,15 +61,17 @@ public class PlayerController : MonoBehaviour
 
 
     [Header("Animation Stuff")]
-    private Animator ForwardWalkingAnim;
+    public Animator animator;
+    public SpriteRenderer spriteRenderer;
 
 
     void Start()
     {
+        animator = GameObject.FindGameObjectWithTag("Target").GetComponent<Animator>();
+        spriteRenderer = GameObject.FindGameObjectWithTag("Target").GetComponent<SpriteRenderer>();
         journeyLength = Vector3.Distance(transform.position, EndPosition.position);  //Hoe ver de dash moet gaan
         attackHitbox.SetActive(false);
         DashHitbox.SetActive(false);
-        ForwardWalkingAnim = GetComponent<Animator>();
     }
 
 
@@ -78,6 +80,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
+            animator.SetBool("Walking", true);
             aaScript.AttackCollider = attackhitboxUp;
             if (isAttacking != true)
             {
@@ -87,9 +90,14 @@ public class PlayerController : MonoBehaviour
             transform.position += transform.forward * MovementSpeed * Time.deltaTime;
             
         }
+        else
+        {
+            animator.SetBool("Walking", false);
+        }
 
         if (Input.GetKey(KeyCode.S))
         {
+            animator.SetBool("Back", true);
             aaScript.AttackCollider = attackhitboxDown;
             if (isAttacking != true)
             {
@@ -99,10 +107,15 @@ public class PlayerController : MonoBehaviour
             transform.position -= transform.forward * MovementSpeed * Time.deltaTime;
              
         }
+        else
+        {
+            animator.SetBool("Back", false);
+        }
 
 
         if (Input.GetKey(KeyCode.D))
         {
+            animator.SetBool("Right", true);
             aaScript.AttackCollider = attackhitboxRight;
             if (isAttacking != true)
             {
@@ -111,10 +124,16 @@ public class PlayerController : MonoBehaviour
             EndPosition = dashspot1.transform; //Sets it to the position you need to dash to
             transform.position += transform.right * MovementSpeed * Time.deltaTime;
         }
+        else
+        {
+            animator.SetBool("Right", false);
+        }
         
 
         if (Input.GetKey(KeyCode.A))
         {
+            spriteRenderer.flipX = true;
+            animator.SetBool("Right", true);
             aaScript.AttackCollider = attackhitboxLeft;
             if (isAttacking != true)
             {
@@ -123,6 +142,13 @@ public class PlayerController : MonoBehaviour
             EndPosition = dashspot2.transform; //Sets it to the position you need to dash to
             transform.position -= transform.right * MovementSpeed * Time.deltaTime;
         }
+        else
+        {
+
+            spriteRenderer.flipX = false;
+            //animator.SetBool("Right", false);
+        }
+        
     }
 
     private void Update()
