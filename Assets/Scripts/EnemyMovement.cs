@@ -24,6 +24,8 @@ public class EnemyMovement : MonoBehaviour
 
     public NavMeshAgent m_Enemy;
 
+    private bool Dead;
+
     //[SerializeField] private float fireRate = 0.1f;
     //private float fireCountDown = 0.5f;
     //[SerializeField] private GameObject knifePrefab;
@@ -145,6 +147,11 @@ public class EnemyMovement : MonoBehaviour
         {
 
         }
+    }
+
+    private void DropOnDeath()
+    {
+
     }
 
    
