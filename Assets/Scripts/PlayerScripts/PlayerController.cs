@@ -182,7 +182,9 @@ public class PlayerController : MonoBehaviour
     IEnumerator DoAttack()
 	{
         attackHitbox.SetActive(true);
+        animator.SetBool("Attack", true);
         yield return new WaitForSeconds(0.5f);
+        animator.SetBool("Attack", false);
         attackHitbox.SetActive(false);
         isAttacking = false;
 	}
