@@ -12,7 +12,7 @@ public class QuickTestScript : MonoBehaviour
     private Material flashMaterial;
 
     [Tooltip("Duration of the flash.")]
-    [SerializeField] 
+    [SerializeField]
     private float duration;
 
     public int health = 3;
@@ -21,6 +21,8 @@ public class QuickTestScript : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Material originalMaterial;
     private Coroutine flashRoutine;
+
+    public GameObject[] itemDrops;
 
     [SerializeField]
     private Collider thisCollider;
@@ -61,10 +63,11 @@ public class QuickTestScript : MonoBehaviour
                 thisCollider.enabled = false;
                 HitCooldown = 0.8f;
             }
-            
+
             if (health <= 0)
             {
-                gameObject.SetActive(false);    
+                gameObject.SetActive(false);
+                ItemDrop();
             }
         }
     }
@@ -82,5 +85,13 @@ public class QuickTestScript : MonoBehaviour
         yield return new WaitForSeconds(duration);
         spriteRenderer.material = originalMaterial;
         flashRoutine = null;
+    }
+
+    private void ItemDrop()
+    {
+        for (int i = 0; i < itemDrops.Length; i++)
+        {
+            Instantiate(itemDrops[i], transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        }
     }
 }
