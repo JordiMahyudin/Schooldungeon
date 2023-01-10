@@ -641,7 +641,7 @@ SpriteRenderer:
   m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1075632845
@@ -741,6 +741,7 @@ RectTransform:
   - {fileID: 188629452}
   - {fileID: 1482013616}
   - {fileID: 1962010162}
+  - {fileID: 1315508137}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -749,6 +750,79 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1315508134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1315508137}
+  - component: {fileID: 1315508136}
+  - component: {fileID: 1315508135}
+  m_Layer: 5
+  m_Name: Transition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1315508135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315508134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1315508136
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315508134}
+  m_CullTransparentMesh: 1
+--- !u!224 &1315508137
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315508134}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1075632849}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1449759542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,6 +1138,7 @@ MonoBehaviour:
   health: 3
   Hittable: 1
   HitCooldown: 0.8
+  itemDrops: []
   thisCollider: {fileID: 863405482}
 --- !u!4 &1623592512
 Transform:
@@ -1214,6 +1289,7 @@ MonoBehaviour:
   health: 3
   Hittable: 1
   HitCooldown: 0.8
+  itemDrops: []
   thisCollider: {fileID: 0}
 --- !u!50 &1808213556
 Rigidbody2D:
@@ -1312,6 +1388,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Tptarget: {fileID: 196968872}
   player: {fileID: 776379989}
+  UItransition: {fileID: 1315508134}
+  Coroutine: 0
 --- !u!65 &1923388852
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1484,6 +1562,31 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.38856992, y: 0.6137627, z: 0.2}
   m_Center: {x: 0.0046937466, y: 0.013118661, z: 0}
+--- !u!212 &2009670791 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 122936063268978769, guid: e8ab14fc90a6b924f950d226d414b4ad, type: 3}
+  m_PrefabInstance: {fileID: 122936063319271759}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2009670795
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009670784}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1213f735ca973834197ea61bf54e8c67, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &122936063319271759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1535,6 +1638,18 @@ PrefabInstance:
       propertyPath: HitPoints.Array.data[4]
       value: 
       objectReference: {fileID: 1962010165}
+    - target: {fileID: 122936064036174048, guid: e8ab14fc90a6b924f950d226d414b4ad, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2009670795}
+    - target: {fileID: 122936064036174048, guid: e8ab14fc90a6b924f950d226d414b4ad, type: 3}
+      propertyPath: tptransition
+      value: 
+      objectReference: {fileID: 1923388851}
+    - target: {fileID: 122936064036174048, guid: e8ab14fc90a6b924f950d226d414b4ad, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 2009670791}
     - target: {fileID: 122936064036174049, guid: e8ab14fc90a6b924f950d226d414b4ad, type: 3}
       propertyPath: m_RootOrder
       value: 4
