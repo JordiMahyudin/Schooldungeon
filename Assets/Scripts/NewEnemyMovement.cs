@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour
+
+public class NewEnemyMovement : MonoBehaviour
 {
     public int m_speed;
 
@@ -34,6 +35,9 @@ public class EnemyMovement : MonoBehaviour
     private Animator anim;
 
     [SerializeField] private bool m_ableToMove = true;
+    [SerializeField] private GameObject m_attack;
+    [SerializeField] private BoxCollider boxCollider;
+
     public NavMeshAgent m_agent;
     //[SerializeField] private float range;
     [SerializeField] private Transform centrepoint;
@@ -48,21 +52,17 @@ public class EnemyMovement : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
-    [SerializeField] private GameObject m_AttackPrefab;
-    [SerializeField] private Transform m_SpawnPos;
-    private Transform playeposition;
-    [SerializeField] private BoxCollider box;
-
     private void Start()
     {
         m_playerRef = GameObject.FindGameObjectWithTag("Target");
         StartCoroutine(FOVRoutine());
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
         anim = GetComponent<Animator>();
+        m_attack.SetActive(false);
         m_agent = GetComponent<NavMeshAgent>();
         m_agent.speed = m_speed;
         ph = GameObject.FindGameObjectWithTag("Target").GetComponent<PlayerHealth>();
-        box.isTrigger = true;
+        boxCollider.isTrigger = false;
         m_OldPosition = transform.position.z;
     }
 
@@ -128,7 +128,6 @@ public class EnemyMovement : MonoBehaviour
         }
 
         m_OldPosition = transform.position.z;
-        playeposition = m_player.transform;
 
     }
 
@@ -149,12 +148,12 @@ public class EnemyMovement : MonoBehaviour
         //enemy will attack with these things happening
         m_canAttackPlayer = false;
         yield return new WaitForSeconds(m_enemyCooldown);
-        box.isTrigger = false;
         Attack();
-        box.isTrigger = true;
         yield return new WaitForSeconds(1f);
         animator.SetBool("BackAttack", false);
         animator.SetBool("ForwardAttack", false);
+        m_attack.SetActive(false);
+        boxCollider.isTrigger = false;
         m_ableToMove = true;
         m_canAttackPlayer = true;
         m_agent.speed = m_speed;
@@ -207,25 +206,30 @@ public class EnemyMovement : MonoBehaviour
 
     private void Attack()
     {
-        if (forward == true)
+        if(forward == true)
         {
-            animator.SetBool("ForwardAttack", true);
+            animator.SetBool("ForwardAttack", true);            
         }
-
-        if (forward == false)
-        {
+        //else
+        //{
+        //    animator.SetBool("ForwardAttack", false);
+        //}
+         if (forward == false)
+         {
             animator.SetBool("BackAttack", true);
-        }
+         }
+        //else
+        //{
+        //    animator.SetBool("BackAttack", false);
+        //}
 
         m_ableToMove = false;
-        //GameObject shot = (GameObject)Instantiate(m_AttackPrefab, m_SpawnPos.position, m_SpawnPos.rotation);
-        //Arrow arrow = shot.GetComponent<Arrow>();
-        //if (arrow != null)
-        //{
-        //    arrow.Seek(playeposition);
-        //}
-       GameObject shoot = Instantiate(m_AttackPrefab, m_SpawnPos.position, Quaternion.identity);
-        Destroy(shoot, 3);
+        boxCollider.isTrigger = true;
+        m_attack.SetActive(true);
+
+        //animator.SetBool("BackAttack", false);
+        //animator.SetBool("ForwardAttack", false);
+
     }
 
     public void ReduceLife(int damage)
@@ -250,6 +254,12 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //player takes damage
+        //if (other.gameObject.CompareTag("Target"))
+        //{
+        //    Debug.Log("enemy");
+        //    ph.GetComponent<PlayerHealth>().TakeDamage(1);
+        //}
 
         if (other.gameObject.CompareTag("Attack"))
         {

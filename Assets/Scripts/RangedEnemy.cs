@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour
+
+public class RangedEnemy : MonoBehaviour
 {
-    public int m_speed;
+    [SerializeField] private int m_speed;
 
-    public float m_radius;
-    public float m_AttackRadius;
+    [SerializeField] private float m_radius;
     [Range(0, 360)]
-    public float m_angle;
+    [SerializeField] private float m_angle;
 
-    public GameObject m_playerRef;
-    public Transform m_player;
+    [SerializeField] private GameObject m_playerRef;
+    [SerializeField] private Transform m_player;
 
-    public LayerMask m_targetMask;
-    public LayerMask m_obstructionMask;
+    [SerializeField] private LayerMask m_targetMask;
+    [SerializeField] private LayerMask m_obstructionMask;
 
-    public bool m_canSeePlayer;
+    [SerializeField] private bool m_canSeePlayer;
 
     public NavMeshAgent m_Enemy;
 
@@ -31,11 +31,10 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float m_enemyCooldown;
     [SerializeField] private int m_damage = 0;
 
-    private Animator anim;
-
     [SerializeField] private bool m_ableToMove = true;
+
     public NavMeshAgent m_agent;
-    //[SerializeField] private float range;
+    [SerializeField] private float range;
     [SerializeField] private Transform centrepoint;
 
     private PlayerHealth ph;
@@ -43,48 +42,62 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private int health;
     [SerializeField] private int playerDamage;
 
-    private float m_OldPosition = 0.0f;
-    private bool forward;
-
-    [SerializeField] private Animator animator;
-
     [SerializeField] private GameObject m_AttackPrefab;
     [SerializeField] private Transform m_SpawnPos;
-    private Transform playeposition;
-    [SerializeField] private BoxCollider box;
-
     private void Start()
-    {
+    {     
         m_playerRef = GameObject.FindGameObjectWithTag("Target");
         StartCoroutine(FOVRoutine());
         Lifes = HitPoints.Length; //Sets lifes equal to the hitpoints
-        anim = GetComponent<Animator>();
         m_agent = GetComponent<NavMeshAgent>();
         m_agent.speed = m_speed;
         ph = GameObject.FindGameObjectWithTag("Target").GetComponent<PlayerHealth>();
-        box.isTrigger = true;
-        m_OldPosition = transform.position.z;
     }
 
     private void Update()
     {
         //movement
-        if (m_canSeePlayer)
+        if (m_canSeePlayer && m_ableToMove == true)
         {
 
             Vector3 dir = m_player.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(dir);
             Vector3 rotation = lookRotation.eulerAngles;
-            //transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
             m_Enemy.SetDestination(m_player.position);
 
-            //if (m_canAttackPlayer == true)
+            //if (fireCountDown <= 0f)
             //{
-
-            //    StartCoroutine(AttackCooldown());
+            //    Attack();
+            //    fireCountDown = 1f / fireRate;
             //}
+            //fireCountDown -= Time.deltaTime;
+
+            if (m_canAttackPlayer == true)
+            {
+
+                StartCoroutine(AttackCooldown());
+            }
         }
+
+        //if (m_canSeePlayer == false)
+        //{
+
+        //    if (m_ableToMove == true)
+        //    {
+        //        if (m_agent.remainingDistance <= m_agent.stoppingDistance)
+        //        {
+        //            Vector3 point;
+        //            if (RandomPoint(centrepoint.position, range, out point))
+        //            {
+        //                Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+        //                m_agent.SetDestination(point);
+        //            }
+        //        }
+
+        //    }
+        //}
 
         if (m_ableToMove == false)
         {
@@ -95,40 +108,6 @@ public class EnemyMovement : MonoBehaviour
         {
             Death();
         }
-
-        if (transform.position.z > m_OldPosition)
-        {
-            //walks
-            forward = true;
-            animator.SetBool("WalkingForward", true);
-        }
-        else
-        {
-            animator.SetBool("WalkingForward", false);
-        }
-
-        if (transform.position.z < m_OldPosition)
-        {
-            //walks backwards
-            forward = false;
-            animator.SetBool("WalkingBack", true);
-        }
-        else
-        {
-            animator.SetBool("WalkingBack", false);
-        }
-
-        if (forward == true)
-        {
-            animator.SetBool("Forward", true);
-        }
-        else
-        {
-            animator.SetBool("Forward", false);
-        }
-
-        m_OldPosition = transform.position.z;
-        playeposition = m_player.transform;
 
     }
 
@@ -149,12 +128,8 @@ public class EnemyMovement : MonoBehaviour
         //enemy will attack with these things happening
         m_canAttackPlayer = false;
         yield return new WaitForSeconds(m_enemyCooldown);
-        box.isTrigger = false;
         Attack();
-        box.isTrigger = true;
         yield return new WaitForSeconds(1f);
-        animator.SetBool("BackAttack", false);
-        animator.SetBool("ForwardAttack", false);
         m_ableToMove = true;
         m_canAttackPlayer = true;
         m_agent.speed = m_speed;
@@ -165,13 +140,8 @@ public class EnemyMovement : MonoBehaviour
     {
         //enemy has a radius and a field of view, the enemy will walk towards the player when in line of sights
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, m_radius, m_targetMask);
-        Collider[] attackRange = Physics.OverlapSphere(transform.position, m_AttackRadius, m_targetMask);
-        if (m_ableToMove == true)
-        {
-            if (attackRange.Length != 0)
-            {
-                StartCoroutine(AttackCooldown());
-            }
+        
+
             if (rangeChecks.Length != 0)
             {
                 Transform target = rangeChecks[0].transform;
@@ -187,45 +157,44 @@ public class EnemyMovement : MonoBehaviour
                     else
                     {
                         m_canSeePlayer = false;
-                        //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
                     }
                 }
                 else
                 {
                     m_canSeePlayer = false;
 
-                    //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
                 }
             }
             else if (m_canSeePlayer)
             {
                 m_canSeePlayer = false;
-                //m_Enemy.SetDestination(m_wayPoints[MwayPointIndex].position);
             }
-        }
     }
+    
+
+    //bool RandomPoint(Vector3 center, float range, out Vector3 result)
+    //{
+    //    //mark random point and will walk to this location
+    //    Vector3 randompoint = center + Random.insideUnitSphere * range;
+    //    NavMeshHit hit;
+    //    if (NavMesh.SamplePosition(randompoint, out hit, 1.0f, NavMesh.AllAreas))
+    //    {
+    //        result = hit.position;
+    //        return true;
+    //    }
+    //    result = Vector3.zero;
+    //    return false;
+    //}
 
     private void Attack()
     {
-        if (forward == true)
-        {
-            animator.SetBool("ForwardAttack", true);
-        }
-
-        if (forward == false)
-        {
-            animator.SetBool("BackAttack", true);
-        }
-
         m_ableToMove = false;
-        //GameObject shot = (GameObject)Instantiate(m_AttackPrefab, m_SpawnPos.position, m_SpawnPos.rotation);
-        //Arrow arrow = shot.GetComponent<Arrow>();
-        //if (arrow != null)
-        //{
-        //    arrow.Seek(playeposition);
-        //}
-       GameObject shoot = Instantiate(m_AttackPrefab, m_SpawnPos.position, Quaternion.identity);
-        Destroy(shoot, 3);
+        GameObject shot = (GameObject)Instantiate(m_AttackPrefab, m_SpawnPos.position, m_SpawnPos.rotation);
+        Arrow arrow = shot.GetComponent<Arrow>();
+        if (arrow != null)
+        {
+            arrow.Seek(m_player);
+        }
     }
 
     public void ReduceLife(int damage)
@@ -250,6 +219,12 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //player takes damage
+        if (other.gameObject.CompareTag("Target"))
+        {
+            Debug.Log("enemy");
+            ph.GetComponent<PlayerHealth>().TakeDamage(1);
+        }
 
         if (other.gameObject.CompareTag("Attack"))
         {
@@ -267,5 +242,6 @@ public class EnemyMovement : MonoBehaviour
     void Death()
     {
         Destroy(gameObject);
-    }
+    }// Start is called before the first frame update
+   
 }
