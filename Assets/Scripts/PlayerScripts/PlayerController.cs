@@ -63,6 +63,9 @@ public class PlayerController : MonoBehaviour
     [Header("Animation Stuff")]
     private Animator ForwardWalkingAnim;
 
+    [Header("Other Script Stuff")]
+    public TpTransition tptransition;
+
 
     void Start()
     {
@@ -70,13 +73,14 @@ public class PlayerController : MonoBehaviour
         attackHitbox.SetActive(false);
         DashHitbox.SetActive(false);
         ForwardWalkingAnim = GetComponent<Animator>();
+        tptransition = GameObject.Find("Teleporter").GetComponent<TpTransition>();
     }
 
 
     private void FixedUpdate()
     {
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && tptransition.Coroutine == false)
         {
             aaScript.AttackCollider = attackhitboxUp;
             if (isAttacking != true)
@@ -88,7 +92,7 @@ public class PlayerController : MonoBehaviour
             
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) && tptransition.Coroutine == false)
         {
             aaScript.AttackCollider = attackhitboxDown;
             if (isAttacking != true)
@@ -101,7 +105,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && tptransition.Coroutine == false)
         {
             aaScript.AttackCollider = attackhitboxRight;
             if (isAttacking != true)
@@ -113,7 +117,7 @@ public class PlayerController : MonoBehaviour
         }
         
 
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && tptransition.Coroutine == false)
         {
             aaScript.AttackCollider = attackhitboxLeft;
             if (isAttacking != true)
