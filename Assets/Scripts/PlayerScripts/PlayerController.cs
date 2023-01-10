@@ -178,14 +178,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
                 isAttacking = true;
-                //Add Animation stuff here :)
-                StartCoroutine(DoAttack());
+            //Add Animation stuff here :)
+            animator.SetBool("Attack", true);
+            StartCoroutine(DoAttack());
         }
     }
     IEnumerator DoAttack()
 	{
-        attackHitbox.SetActive(true);
-        animator.SetBool("Attack", true);
+        attackHitbox.SetActive(true);        
         yield return new WaitForSeconds(0.5f);
         animator.SetBool("Attack", false);
         attackHitbox.SetActive(false);
