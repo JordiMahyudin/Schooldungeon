@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 3191325547423862190}
   - component: {fileID: 6821954112098042444}
   m_Layer: 0
-  m_Name: WallTreeRight_P
+  m_Name: DoorTreeRight_P
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
