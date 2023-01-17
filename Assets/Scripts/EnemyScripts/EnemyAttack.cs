@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    private PlayerHealth ph;
+    public PlayerHealth ph;
 
     void Start()
     {
