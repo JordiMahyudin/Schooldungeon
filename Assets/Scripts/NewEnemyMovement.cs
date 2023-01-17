@@ -42,7 +42,7 @@ public class NewEnemyMovement : MonoBehaviour
     //[SerializeField] private float range;
     [SerializeField] private Transform centrepoint;
 
-    public PlayerHealth ph;
+    private PlayerHealth ph;
 
     [SerializeField] private int health;
     [SerializeField] private int playerDamage;
