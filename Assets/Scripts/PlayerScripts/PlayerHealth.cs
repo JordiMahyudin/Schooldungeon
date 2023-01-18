@@ -25,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
     {
         UpdateHealth();
     }
+   
 
     public void UpdateHealth()
     {
@@ -52,6 +53,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Death()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

@@ -66,6 +66,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other Script Stuff")]
     public TpTransition tptransition;
+    [SerializeField]
+    private bool istouchingwall = false;
 
 
     void Start()
@@ -98,7 +100,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Walking", false);
         }
 
-        if (Input.GetKey(KeyCode.S) && tptransition.Coroutine == false)
+        if (Input.GetKey(KeyCode.S) && tptransition.Coroutine == false && istouchingwall == false)
         {
             animator.SetBool("Back", true);
             aaScript.AttackCollider = attackhitboxDown;
@@ -133,7 +135,7 @@ public class PlayerController : MonoBehaviour
         }
         
 
-        if (Input.GetKey(KeyCode.A) && tptransition.Coroutine == false)
+        if (Input.GetKey(KeyCode.A) && tptransition.Coroutine == false && istouchingwall == false)
         {
             spriteRenderer.flipX = true;
             animator.SetBool("Right", true);
